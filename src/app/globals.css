@@ -1,26 +1,108 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+:root {
+  --color-background: 0 0% 100%;
+  --color-foreground: 220 15% 15%;
+
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 220 15% 15%;
+
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 220 15% 15%;
+
+  --color-primary: 220 90% 56%;
+  --color-primary-foreground: 0 0% 100%;
+
+  --color-secondary: 220 60% 97%;
+  --color-secondary-foreground: 220 15% 15%;
+
+  --color-muted: 220 20% 96%;
+  --color-muted-foreground: 220 10% 50%;
+
+  --color-accent: 280 80% 65%;
+  --color-accent-foreground: 0 0% 100%;
+
+  --color-destructive: 0 84.2% 60.2%;
+  --color-destructive-foreground: 0 0% 100%;
+
+  --color-border: 220 20% 88%;
+  --color-input: 220 20% 95%;
+  --color-ring: 220 90% 56%;
+
+  --radius: 1rem;
+  
+  --gradient-primary: linear-gradient(135deg, hsl(220 90% 56%) 0%, hsl(280 80% 65%) 50%, hsl(320 70% 60%) 100%);
+  --gradient-soft: linear-gradient(180deg, hsl(220 60% 98%) 0%, hsl(280 40% 98%) 100%);
+  --gradient-overlay: linear-gradient(135deg, hsl(220 90% 96%) 0%, hsl(280 80% 96%) 100%);
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Legacy variable aliases to support components/styles expecting love_love tokens */
+:root {
+  /* base */
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+
+  /* surfaces */
+  --card: var(--color-card);
+  --card-foreground: var(--color-card-foreground);
+  --popover: var(--color-popover);
+  --popover-foreground: var(--color-popover-foreground);
+
+  /* intents */
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-secondary-foreground);
+  --destructive: var(--color-destructive);
+  --destructive-foreground: var(--color-destructive-foreground);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-accent-foreground);
+
+  /* neutrals */
+  --muted: var(--color-muted);
+  --muted-foreground: var(--color-muted-foreground);
+
+  /* controls */
+  --border: var(--color-border);
+  --input: var(--color-input);
+  --ring: var(--color-ring);
+}
+
+ 
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Compatibility utilities to ensure semantic tokens resolve in all cases */
+@layer utilities {
+  .text-foreground { color: hsl(var(--color-foreground)); }
+  .text-muted-foreground { color: hsl(var(--color-muted-foreground)); }
+  .bg-card { background-color: hsl(var(--color-card)); }
+  .text-card-foreground { color: hsl(var(--color-card-foreground)); }
 }
+
