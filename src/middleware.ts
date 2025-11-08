@@ -1,38 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// const createULID = (): string => {
-//   const timestamp = Date.now().toString(36);
-//   const random = Math.random().toString(36).substring(2);
-//   const timeEncoded = timestamp.padStart(10, "0");
-//   const randomEncoded = random.padStart(16, "0");
-//   return timeEncoded + randomEncoded;
-// };
+const createULID = (): string => {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substring(2);
+  const timeEncoded = timestamp.padStart(10, "0");
+  const randomEncoded = random.padStart(16, "0");
+  return timeEncoded + randomEncoded;
+};
 
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
 
   const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-request-pathname", pathname);
   const response = NextResponse.next({
     request: {
       headers: requestHeaders
     }
   });
 
-  // 🔐 Gatekeep /desk routes
-  // if (pathname.startsWith("/desk")) {
-  //   const accessToken = request.cookies.get("sonata_access_token");
-  //   const refreshToken = request.cookies.get("sonata_refresh_token");
+  const accessToken = request.cookies.get("sonata_access_token")?.value;
+  const refreshToken = request.cookies.get("sonata_refresh_token")?.value;
+  const isAuthenticated = Boolean(accessToken && refreshToken);
 
-  //   console.log("🛡️ Access Token:", accessToken?.value);
-  //   console.log("🔄 Refresh Token:", refreshToken?.value);
+  const publicRoutes = ["/signin", "/signin/teacher", "/signup", "/signup/teacher"];
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+  const isTeacherRoute = pathname.startsWith("/teacher");
 
-  //   if (!accessToken?.value && !refreshToken?.value) {
-  //     return NextResponse.redirect(new URL("/login", request.url));
-  //   }
-  //   return response;
-  // }
+  if (isAuthenticated && isPublicRoute) {
+    return NextResponse.redirect(new URL("/teacher/dashboard", request.url));
+  }
 
-  // if (!pathname.startsWith("/login")) {
+  if (!isAuthenticated && isTeacherRoute) {
+    console.log("🛡️ Access Token:", accessToken);
+    console.log("🔄 Refresh Token:", refreshToken);
+    return NextResponse.redirect(new URL("/signin/teacher", request.url));
+  }
+
+  // if (!pathname.startsWith("/signin")) {
   //   // Guest ID logic only for routes where cart should load
   //   const guestID = request.cookies.get("sonata-guestID");
   //   if (!guestID) {
@@ -52,7 +57,7 @@ export async function middleware(request: NextRequest) {
   //       sameSite: "lax",
   //       secure: process.env.NODE_ENV === "production"
   //     });
-  //   }
+    // }
   // }
 
   return response;

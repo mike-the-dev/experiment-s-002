@@ -1,15 +1,16 @@
 "use client";
 
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  MessageSquare, 
-  Users, 
-  Home, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  Calendar,
+  MessageSquare,
+  Users,
+  Home,
+  BarChart3,
   Settings,
   User,
-  Sparkles
+  Sparkles,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,17 +24,20 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { AppRoute } from "@/types/appRoutes";
+import type { CSSProperties } from "react";
 
 const items = [
-  { title: "Dashboard", url: "/teacher/dashboard", icon: LayoutDashboard },
-  { title: "My Profile", url: "/teacher/dashboard/profile", icon: User },
-  { title: "Schedule", url: "/teacher/schedule", icon: Calendar },
-  { title: "Messages", url: "/teacher/messages", icon: MessageSquare },
-  { title: "Students", url: "/teacher/students", icon: Users },
-  { title: "My Studio", url: "/teacher/studio", icon: Home },
-  { title: "My Sonata Site (Beta)", url: "/teacher/sonata-site", icon: Sparkles },
-  { title: "Analytics", url: "/teacher/analytics", icon: BarChart3 },
-  { title: "Settings", url: "/teacher/settings", icon: Settings },
+  { title: "Dashboard", url: AppRoute.TeacherDashboard, icon: LayoutDashboard },
+  { title: "My Profile", url: AppRoute.TeacherDashboardProfile, icon: User },
+  { title: "Schedule", url: AppRoute.TeacherSchedule, icon: Calendar },
+  { title: "Messages", url: AppRoute.TeacherMessages, icon: MessageSquare },
+  { title: "Students", url: AppRoute.TeacherStudents, icon: Users },
+  { title: "My Studio", url: AppRoute.TeacherStudio, icon: Home },
+  { title: "Growth Center", url: AppRoute.TeacherDashboardGrowthCenter, icon: TrendingUp },
+  { title: "My Sonata Site (Beta)", url: AppRoute.TeacherSonataSite, icon: Sparkles },
+  { title: "Analytics", url: AppRoute.TeacherAnalytics, icon: BarChart3 },
+  { title: "Settings", url: AppRoute.TeacherSettings, icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -41,8 +45,16 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent>
+    <Sidebar
+      collapsible="icon"
+      className="md:[&_[data-sidebar=sidebar]]:bg-gradient-to-br md:[&_[data-sidebar=sidebar]]:from-purple-50 md:[&_[data-sidebar=sidebar]]:via-white md:[&_[data-sidebar=sidebar]]:to-blue-50 md:[&_[data-sidebar=sidebar]]:border-r md:[&_[data-sidebar=sidebar]]:border-purple-100/40"
+      style={
+        {
+          "--sidebar-border-width": "1px",
+        } as CSSProperties
+      }
+    >
+      <SidebarContent className="md:pt-16">
         <SidebarGroup>
           <div className="px-4 py-4">
             <h2 className="text-lg font-semibold">

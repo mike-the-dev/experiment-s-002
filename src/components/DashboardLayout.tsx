@@ -8,19 +8,21 @@ import { Button } from "./ui/button";
 import { Plus, Bell, LogOut } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { clearAuthSession } from "@/clearAuthSession";
+import { cn } from "@/lib/utils";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  shiftWithSidebar?: boolean;
 }
 
 function Header() {
   const router = useRouter();
-  const { state, open } = useSidebar();
-  const isMobile = useIsMobile();
   const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
 
   const handleSignOut = () => {
-    router.push("/signin");
+    clearAuthSession();
+    router.push("/signin/teacher");
   };
 
   const handleAnnouncementSave = () => {
@@ -32,14 +34,10 @@ function Header() {
     setAnnouncementModalOpen(false);
   };
 
-  // Calculate margin: only apply on desktop, based on sidebar state
-  const marginLeft = !isMobile ? (open ? "16rem" : "3rem") : "0";
-
   return (
     <>
-      <header 
-        className="h-16 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center justify-between px-6 sticky top-0 z-30 transition-[margin-left] duration-200 ease-linear"
-        style={{ marginLeft }}
+      <header
+        className="h-16 border-b bg-white backdrop-blur supports-[backdrop-filter]:bg-white/80 flex items-center justify-between px-6 sticky top-0 z-30"
       >
         <div className="flex items-center gap-4">
           <SidebarTrigger />
@@ -77,23 +75,46 @@ function Header() {
   );
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+function useSidebarOffset(shiftWithSidebar: boolean) {
+  const { open } = useSidebar();
+  const isMobile = useIsMobile();
+
+  if (!shiftWithSidebar || isMobile) {
+    return "0px";
+  }
+
+  return open ? "var(--sidebar-width)" : "var(--sidebar-width-icon)";
+}
+
+function ContentArea({ children, shiftWithSidebar }: { children: ReactNode; shiftWithSidebar: boolean }) {
+  const sidebarOffset = useSidebarOffset(shiftWithSidebar);
+
+  return (
+    <div
+      className={cn(
+        "flex min-h-screen flex-1 min-w-0 flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50",
+        shiftWithSidebar && "transition-[margin-left] duration-200 ease-linear",
+      )}
+      style={shiftWithSidebar ? { marginLeft: sidebarOffset } : undefined}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function DashboardLayout({ children, shiftWithSidebar = false }: DashboardLayoutProps) {
   return (
     <SidebarProvider defaultOpen={false}>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-purple-50 via-white to-blue-50">
-        <AppSidebar />
-        
-        <div className="flex-1 flex flex-col">
-          <Header />
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-          
-          <footer className="py-4 text-center text-sm text-muted-foreground border-t bg-background/50">
-            Powered by Sonata
-          </footer>
-        </div>
-      </div>
+      <AppSidebar />
+      <ContentArea shiftWithSidebar={shiftWithSidebar}>
+        <Header />
+        <main className="flex-1 overflow-auto">
+          {children}
+        </main>
+        <footer className="py-4 text-center text-sm text-muted-foreground border-t bg-background/50">
+          Powered by Sonata
+        </footer>
+      </ContentArea>
     </SidebarProvider>
   );
 }

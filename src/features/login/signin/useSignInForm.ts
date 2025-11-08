@@ -57,7 +57,7 @@ export const useSignInForm = (): UseSignInFormReturn => {
           if (accountType === "student") {
             router.push("/student/dashboard");
           } else {
-            router.push("/dashboard");
+            router.push("/teacher/dashboard");
           }
         }
       } catch (error: any) {
