@@ -2,18 +2,15 @@
 
 import { ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { Button } from "./ui/button";
 import { Plus, Bell, LogOut } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { clearAuthSession } from "@/clearAuthSession";
-import { cn } from "@/lib/utils";
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  shiftWithSidebar?: boolean;
 }
 
 function Header() {
@@ -75,38 +72,19 @@ function Header() {
   );
 }
 
-function useSidebarOffset(shiftWithSidebar: boolean) {
-  const { open } = useSidebar();
-  const isMobile = useIsMobile();
-
-  if (!shiftWithSidebar || isMobile) {
-    return "0px";
-  }
-
-  return open ? "var(--sidebar-width)" : "var(--sidebar-width-icon)";
-}
-
-function ContentArea({ children, shiftWithSidebar }: { children: ReactNode; shiftWithSidebar: boolean }) {
-  const sidebarOffset = useSidebarOffset(shiftWithSidebar);
-
+function ContentArea({ children }: { children: ReactNode }) {
   return (
-    <div
-      className={cn(
-        "flex min-h-screen flex-1 min-w-0 flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50",
-        shiftWithSidebar && "transition-[margin-left] duration-200 ease-linear",
-      )}
-      style={shiftWithSidebar ? { marginLeft: sidebarOffset } : undefined}
-    >
+    <div className="flex h-screen flex-1 min-w-0 flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
       {children}
     </div>
   );
 }
 
-export function DashboardLayout({ children, shiftWithSidebar = false }: DashboardLayoutProps) {
+export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <ContentArea shiftWithSidebar={shiftWithSidebar}>
+      <ContentArea>
         <Header />
         <main className="flex-1 overflow-auto">
           {children}

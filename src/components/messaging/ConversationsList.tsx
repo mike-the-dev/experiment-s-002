@@ -61,8 +61,8 @@ export function ConversationsList({
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b">
+    <div className="h-full flex flex-col chat-container-white">
+      <div className="p-4 border-b chat-container-white">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           <Input
@@ -74,7 +74,7 @@ export function ConversationsList({
         </div>
       </div>
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 chat-container-white">
         <div className="divide-y">
           {sortedConversations.map((conversation) => {
             const otherUser = getOtherUser(conversation);
@@ -94,12 +94,12 @@ export function ConversationsList({
                 key={conversation.id}
                 onClick={() => onSelectConversation(conversation.id)}
                 className={cn(
-                  "w-full p-4 flex gap-3 hover:bg-accent/50 transition-colors text-left",
-                  isSelected && "bg-accent",
+                  "w-full p-4 flex gap-3 transition-colors text-left conversation-item",
+                  isSelected && "conversation-selected",
                 )}
               >
                 <Avatar className="h-12 w-12 flex-shrink-0">
-                  <AvatarFallback>{initials}</AvatarFallback>
+                  <AvatarFallback className="avatar-bg-color">{initials}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1 min-w-0">
@@ -112,7 +112,7 @@ export function ConversationsList({
                     >
                       {otherUser.name}
                     </h3>
-                    <span className="text-xs text-muted-foreground flex-shrink-0">
+                    <span className="text-xs text-muted-foreground flex-shrink-0 conversation-text-white">
                       {formatDistanceToNow(
                         new Date(conversation.lastMessageAt),
                         {
@@ -125,7 +125,7 @@ export function ConversationsList({
                   <div className="flex items-center justify-between gap-2">
                     <p
                       className={cn(
-                        "text-sm truncate",
+                        "text-sm truncate conversation-text-white conversation-message-preview",
                         hasUnread
                           ? "text-foreground font-medium"
                           : "text-muted-foreground",
@@ -144,7 +144,7 @@ export function ConversationsList({
                   </div>
 
                   {otherUser.instrument && (
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-1 conversation-text-white">
                       {otherUser.instrument}
                     </p>
                   )}

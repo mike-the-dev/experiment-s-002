@@ -47,7 +47,7 @@ export function MessageBubble({
       className={cn("flex gap-3 mb-4", isCurrentUser && "flex-row-reverse")}
     >
       <Avatar className="h-8 w-8 flex-shrink-0">
-        <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+        <AvatarFallback className="text-xs avatar-bg-color">{initials}</AvatarFallback>
       </Avatar>
 
       <div
@@ -67,9 +67,7 @@ export function MessageBubble({
         <div
           className={cn(
             "rounded-2xl px-4 py-2 relative group",
-            isCurrentUser
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted",
+            isCurrentUser ? "chat-bubble-current" : "chat-bubble-other",
           )}
         >
           {message.type === "text" && (

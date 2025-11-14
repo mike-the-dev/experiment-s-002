@@ -156,6 +156,7 @@ export function MessageComposer({
           size="icon"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled}
+          className="attachment-button"
         >
           <Paperclip className="h-4 w-4" />
         </Button>
@@ -172,6 +173,11 @@ export function MessageComposer({
         <Button
           onClick={handleSend}
           disabled={disabled || (!message.trim() && attachments.length === 0)}
+          className={
+            disabled || (!message.trim() && attachments.length === 0)
+              ? "send-button-disabled"
+              : "send-button-enabled"
+          }
         >
           <Send className="h-4 w-4" />
         </Button>

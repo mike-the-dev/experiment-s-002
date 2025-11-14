@@ -135,18 +135,18 @@ export function ChatThread({
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="border-b bg-background p-4 flex items-center justify-between">
+    <div className="h-full flex flex-col chat-container-white">
+      <div className="border-b chat-container-white p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="avatar-bg-color">{initials}</AvatarFallback>
           </Avatar>
           <div>
             <Link href={`/students/${otherUser.id}`} className="hover:underline">
               <h2 className="font-semibold">{otherUser.name}</h2>
             </Link>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs role-badge-bg">
                 {otherUser.role === "student" ? "Student" : "Teacher"}
               </Badge>
               {otherUser.instrument && (
@@ -160,23 +160,23 @@ export function ChatThread({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:bg-[#BE5EED] hover:text-white rounded-xl">
               <MoreVertical className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-popover z-50">
+          <DropdownMenuContent align="end" className="bg-white z-50">
             {isBlocked ? (
-              <DropdownMenuItem onClick={onUnblockUser}>
+              <DropdownMenuItem onClick={onUnblockUser} className="cursor-pointer hover:bg-[#BE5EED] hover:text-white focus:bg-[#BE5EED] focus:text-white">
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Unblock user
               </DropdownMenuItem>
             ) : (
               <>
-                <DropdownMenuItem onClick={() => setBlockDialogOpen(true)}>
+                <DropdownMenuItem onClick={() => setBlockDialogOpen(true)} className="cursor-pointer hover:bg-[#BE5EED] hover:text-white focus:bg-[#BE5EED] focus:text-white">
                   <AlertTriangle className="h-4 w-4 mr-2" />
                   Block user
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setReportDialogOpen(true)}>
+                <DropdownMenuItem onClick={() => setReportDialogOpen(true)} className="cursor-pointer hover:bg-[#BE5EED] hover:text-white focus:bg-[#BE5EED] focus:text-white">
                   <Flag className="h-4 w-4 mr-2" />
                   Report user
                 </DropdownMenuItem>
@@ -186,7 +186,7 @@ export function ChatThread({
         </DropdownMenu>
       </div>
 
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4 chat-container-white" ref={scrollRef}>
         {isBlocked && (
           <Alert className="mb-4">
             <AlertTriangle className="h-4 w-4" />

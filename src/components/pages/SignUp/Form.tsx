@@ -159,7 +159,7 @@ export function Form() {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? "Creating account..." : "Create Account"}
       </Button>

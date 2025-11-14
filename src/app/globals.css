@@ -106,3 +106,87 @@ All colors MUST be HSL.
   .text-card-foreground { color: hsl(var(--color-card-foreground)); }
 }
 
+/* Chat bubble colors */
+.chat-bubble-current {
+  background-color: hsl(220, 90%, 56%);
+  color: white;
+}
+
+.chat-bubble-other {
+  background-color: hsl(220, 20%, 96%);
+  color: hsl(220, 15%, 15%);
+}
+
+/* Chat container backgrounds */
+.chat-container-white {
+  background-color: white !important;
+}
+
+/* Conversation selected state - purple highlight */
+.conversation-selected {
+  background-color: #BE5EED !important;
+}
+
+.conversation-selected .conversation-text-white {
+  color: white !important;
+}
+
+/* Make username white when selected */
+.conversation-selected h3 {
+  color: white !important;
+}
+
+/* Make message preview white with reduced opacity when selected */
+.conversation-selected .conversation-message-preview {
+  color: white !important;
+  opacity: 0.8 !important;
+}
+
+.conversation-item:hover:not(.conversation-selected) {
+  background-color: hsl(280, 40%, 98%) !important;
+}
+
+/* Avatar background color */
+.avatar-bg-color {
+  background-color: #FAFAFA !important;
+}
+
+/* Role badge background color */
+.role-badge-bg {
+  background-color: #F3F4F6 !important;
+}
+
+/* Send button colors */
+.send-button-enabled {
+  background-color: #296EF4 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.send-button-enabled:hover:not(:disabled) {
+  background-color: #1e5dd9 !important;
+}
+
+.send-button-disabled,
+.send-button-disabled:disabled {
+  background-color: #9FBAF9 !important;
+  color: white !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+  border: none !important;
+}
+
+/* Smart replies and attachment button hover */
+.smart-reply-button,
+.attachment-button {
+  cursor: pointer !important;
+}
+
+.smart-reply-button:hover:not(:disabled),
+.attachment-button:hover:not(:disabled) {
+  background-color: #BE5EED !important;
+  color: white !important;
+  border-color: #BE5EED !important;
+  font-weight: 600 !important;
+}
+

@@ -54,7 +54,7 @@ export function AppSidebar() {
         } as CSSProperties
       }
     >
-      <SidebarContent className="md:pt-16">
+      <SidebarContent>
         <SidebarGroup>
           <div className="px-4 py-4">
             <h2 className="text-lg font-semibold">

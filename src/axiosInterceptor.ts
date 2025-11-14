@@ -3,6 +3,7 @@ import axios from "axios";
 import { refreshAccessToken } from "@/api";
 import { storeAuthSession } from "@/storeAuthSession";
 import { clearAuthSession } from "@/clearAuthSession";
+import { clearAuthAndRedirect } from "@/app/_actions/auth";
 
 /**
  * @author mike-the-dev (Michael Camacho)
@@ -68,7 +69,7 @@ axiosInstance.interceptors.response.use(
         });
         // Clear all session and auth data before redirecting
         clearAuthSession();
-        window.location.href = "/login";
+        await clearAuthAndRedirect("/login");
         return Promise.reject(err);
       }
     }

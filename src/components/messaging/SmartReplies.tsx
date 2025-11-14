@@ -32,7 +32,7 @@ export function SmartReplies({ onSelectReply }: SmartRepliesProps) {
           key={index}
           variant="outline"
           size="sm"
-          className="flex-shrink-0 text-xs whitespace-nowrap"
+          className="flex-shrink-0 text-xs whitespace-nowrap smart-reply-button"
           onClick={() => onSelectReply(reply)}
         >
           {reply}

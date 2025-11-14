@@ -2,7 +2,6 @@
 
 import React from "react";
 import { formOptions, useForm } from "@tanstack/react-form";
-import { useRouter } from "next/navigation";
 import { useSignUp } from "./useSignUp";
 import {
   SignupFormData,
@@ -20,10 +19,9 @@ import {
 } from "../_shared/signup.validators";
 import { storeAuthSession } from "@/storeAuthSession";
 import { useToast } from "@/hooks/use-toast";
+import { setAuthCookiesAndRedirect } from "@/app/_actions/auth";
 
 export const useSignUpForm = (): UseSignUpFormReturn => {
-  const router = useRouter();
-
   const signUpService = useSignUp();
   const { toast } = useToast();
   const firstNameInputRef = React.useRef<HTMLInputElement>(null);
@@ -48,18 +46,24 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
         const response = await signUpService.signUp(payload);
 
         if (response?.authorization) {
+          // Store authentication session in client storage (for axios interceptor)
           storeAuthSession(response.authorization.user, {
             access: response.authorization.tokens.access,
             refresh: response.authorization.tokens.refresh,
           });
+
+          toast({
+            title: "Account created!",
+            description: "Your teacher account has been created successfully.",
+          });
+
+          // Set cookies server-side and redirect (ensures cookies are available for server components)
+          await setAuthCookiesAndRedirect(
+            response.authorization.tokens.access,
+            response.authorization.tokens.refresh,
+            "/teacher/dashboard"
+          );
         }
-
-        toast({
-          title: "Account created!",
-          description: "Your teacher account has been created successfully.",
-        });
-
-        router.push("/teacher/dashboard");
       } catch (error) {
         console.log("Sign up form submission error:", error);
       }

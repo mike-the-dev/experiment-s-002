@@ -2,16 +2,16 @@
 
 import React from "react";
 import { formOptions, useForm } from "@tanstack/react-form";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useSignIn } from "./useSignIn";
 import { LoginFormData, UseSignInFormReturn, LoginFormValidators } from "../_shared/login.schema";
 import { mapLoginFormData } from "../_shared/login.mappers";
 import { loginFormSchema, emailFieldSchema, passwordFieldSchema } from "../_shared/login.validators";
 import { storeAuthSession } from "@/storeAuthSession";
 import { useToast } from "@/hooks/use-toast";
+import { setAuthCookiesAndRedirect } from "@/app/_actions/auth";
 
 export const useSignInForm = (): UseSignInFormReturn => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const accountType = (searchParams?.get("type") as "teacher" | "student" | null);
   const signInService = useSignIn();
@@ -41,7 +41,7 @@ export const useSignInForm = (): UseSignInFormReturn => {
         console.log("✅ Sign in response:", res);
 
         if (res?.authorization) {
-          // Store authentication session
+          // Store authentication session in client storage (for axios interceptor)
           storeAuthSession(res.authorization.user, {
             access: res.authorization.tokens.access,
             refresh: res.authorization.tokens.refresh,
@@ -53,12 +53,17 @@ export const useSignInForm = (): UseSignInFormReturn => {
             description: "You have successfully signed in.",
           });
 
-          // Navigate based on account type
-          if (accountType === "student") {
-            router.push("/student/dashboard");
-          } else {
-            router.push("/teacher/dashboard");
-          }
+          // Determine redirect path based on account type
+          const redirectPath = accountType === "student" 
+            ? "/student/dashboard" 
+            : "/teacher/dashboard";
+
+          // Set cookies server-side and redirect (ensures cookies are available for server components)
+          await setAuthCookiesAndRedirect(
+            res.authorization.tokens.access,
+            res.authorization.tokens.refresh,
+            redirectPath
+          );
         }
       } catch (error: any) {
         console.log("Form submission error: ", error);

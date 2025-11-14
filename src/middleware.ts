@@ -23,10 +23,22 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("sonata_refresh_token")?.value;
   const isAuthenticated = Boolean(accessToken && refreshToken);
 
+  // Define onboarding routes that authenticated users need to access
+  const onboardingRoutes = [
+    "/signup/teacher/account-type",
+    "/signup/teacher/teaching-profile",
+    "/signup/teacher/stripe-connect",
+    "/signup/teacher/pricing-setup",
+    "/signup/teacher/invite-students"
+  ];
+  const isOnboardingRoute = onboardingRoutes.some(route => pathname.startsWith(route));
+
+  // Public routes (but exclude onboarding routes - authenticated users need access to those)
   const publicRoutes = ["/signin", "/signin/teacher", "/signup", "/signup/teacher"];
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route)) && !isOnboardingRoute;
   const isTeacherRoute = pathname.startsWith("/teacher");
 
+  // Don't redirect authenticated users away from onboarding routes
   if (isAuthenticated && isPublicRoute) {
     return NextResponse.redirect(new URL("/teacher/dashboard", request.url));
   }

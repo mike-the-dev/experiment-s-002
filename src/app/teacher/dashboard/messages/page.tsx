@@ -214,7 +214,7 @@ export default function MessagesPage() {
 
   if (loading) {
     return (
-      <DashboardLayout shiftWithSidebar>
+      <DashboardLayout>
         <div className="h-full flex">
           <div className="w-80 border-r">
             <div className="p-4 space-y-4">
@@ -240,8 +240,8 @@ export default function MessagesPage() {
 
   return (
     <DashboardLayout shiftWithSidebar>
-      <div className="h-[calc(100vh-8rem)] flex">
-        <div className="w-80 border-r flex-shrink-0 bg-background">
+      <div className="h-[calc(100vh-8rem)] flex chat-container-white">
+        <div className="w-80 border-r flex-shrink-0 chat-container-white">
           <ConversationsList
             conversations={conversations}
             users={mockUsers}
@@ -251,7 +251,7 @@ export default function MessagesPage() {
           />
         </div>
 
-        <div className="flex-1 bg-background">
+        <div className="flex-1 chat-container-white">
           {selectedConversation && currentUser && otherUser ? (
             <ChatThread
               messages={conversationMessages}
@@ -265,7 +265,7 @@ export default function MessagesPage() {
               onFlagMessage={handleFlagMessage}
             />
           ) : (
-            <div className="h-full flex items-center justify-center text-muted-foreground">
+            <div className="h-full flex items-center justify-center text-muted-foreground chat-container-white">
               Select a conversation to start messaging
             </div>
           )}
